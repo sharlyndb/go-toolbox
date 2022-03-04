@@ -10,9 +10,12 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
+	"fmt"
 	"io"
 	"log"
 )
+
+const salt string = "*$salt@*"
 
 // HmacSha256Base64 计算hmac
 func HmacSha256Base64(message string, secret string) string {
@@ -36,4 +39,12 @@ func HmacSha256Hex(message string, secret string) string {
 	}
 	sign := hex.EncodeToString(h.Sum(nil))
 	return sign
+}
+
+// SHA256 Sha 算签名
+func SHA256(text string) string {
+	hash := sha256.New()
+	text = salt + text + salt
+	hash.Write([]byte(text))
+	return fmt.Sprintf("%x", hash.Sum(nil))
 }
