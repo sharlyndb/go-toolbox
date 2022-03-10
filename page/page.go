@@ -70,37 +70,37 @@ const (
 type PageBean struct {
 
 	/** 当前页  */
-	Page int `json:"page"`
+	Page             int                 `json:"page"`
 
 	/** 当前页的行数 */
-	PageSize int `json:"pageSize"`
+	PageSize         int                 `json:"pageSize"`
 
 	/** 总记录数 */
-	Total int64 `json:"total"`
+	Total            int64               `json:"total"`
 
 	/** 每行的数据 */
-	Rows interface{} `json:"rows"`
+	Rows             interface{}         `json:"rows"`
 }
 
 type PageInfo struct {
 
 	/** 当前页 */
-	Current int
+	Current          int
 
 	/** 每页显示的最大行数 */
-	RowCount int
+	RowCount         int
 
 	/** 表名 仅限于指定表名去查询 */
-	TableName string
+	TableName        string
 
 	/** 查询 and 条件参数 */
-	AndParams map[string]interface{}
+	AndParams        map[string]interface{}
 
 	/** 查询 or 条件参数 */
-	OrParams map[string]interface{}
+	OrParams         map[string]interface{}
 
 	/** 排序 */
-	OrderStr string
+	OrderStr         string
 }
 
 // PageParam 获取url查询参数
@@ -215,7 +215,14 @@ func PageParam(c *gin.Context) *PageInfo {
 			}
 			key = CamelToCase(key)
 			orParams[key+" <= ?"] = value
-		} else if strings.Index(value, orgt) == 0 {
+		}  else if strings.Index(value, orgte) == 0 {
+			value = strings.Replace(value, orgte, "", 1)
+			if value == "" {
+				continue
+			}
+			key = CamelToCase(key)
+			orParams[key+" >= ?"] = value
+		}else if strings.Index(value, orgt) == 0 {
 			value = strings.Replace(value, orgt, "", 1)
 			if value == "" {
 				continue
